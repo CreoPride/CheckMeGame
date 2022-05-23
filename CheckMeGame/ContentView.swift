@@ -9,33 +9,32 @@ import SwiftUI
 
 struct ContentView: View {
 
-    @State private var sliderValue = 10.0
+    @State private var sliderValue = 50.0
     @State private var isPresented = false
     @State private var randomNumber = Int.random(in: 0...100)
-
-    @State private var score = 0
 
     var body: some View {
         VStack( spacing: 20) {
             Text("Move the slider as close to \(randomNumber) as possible!")
+                .multilineTextAlignment(.center)
 
             HStack(spacing: 16) {
                 Text("0")
-                OpaqueSlider(
+                TransparencyThumbSlider(
                     sliderValue: $sliderValue,
-                    opaqueScore: computeScore(random: randomNumber, slider: sliderValue)
+                    sliderColor: .red,
+                    sliderThumbTransparency: computeScore()
                 )
                 Text("100")
             }
 
             Button("Check me!") {
                 isPresented.toggle()
-                score = computeScore(random: randomNumber, slider: sliderValue)
             }
             .alert(isPresented: $isPresented) {
                 Alert(
                     title: Text("Your score:"),
-                    message: Text("\(score)"),
+                    message: Text("\(computeScore())"),
                     dismissButton: .cancel()
                 )}
 
@@ -43,6 +42,11 @@ struct ContentView: View {
                 randomNumber = Int.random(in: 0...100)
             }
         }.padding()
+    }
+
+    private func computeScore() -> Int {
+        let difference = abs(randomNumber - lround(sliderValue))
+        return 100 - difference
     }
 }
 
@@ -52,7 +56,3 @@ struct ContentView_Previews: PreviewProvider {
     }
 }
 
-private func computeScore(random targetValue: Int, slider currentValue: Double) -> Int {
-    let difference = abs(targetValue - lround(currentValue))
-    return 100 - difference
-}
