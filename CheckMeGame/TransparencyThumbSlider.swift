@@ -56,7 +56,7 @@ extension TransparencyThumbSlider {
     }
 }
 
-struct OpaqueSlider_Previews: PreviewProvider {
+struct TransparencyThumbSlider_Previews: PreviewProvider {
     static var previews: some View {
         TransparencyThumbSlider(
             sliderValue: .constant(9),
